@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SORIL</title>
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calme, lumineux, presque silencieux — la marque parle par la pièce.
+   IDEA: une vitrine blanche où le vêtement entre en scène par-dessus le nom.
+   PICTURE: le t-shirt SORIL détouré, qui monte et recouvre les lettres.
+   COLOUR and TYPE: blanc pur, encre noire douce ; Outfit léger, rond comme le cœur du logo.
+   LAYOUT: plein écran, une seule chose à la fois : nom, pièce, phrase, collection. */
+:root{color-scheme:light;--bg:#fff;--ink:#111;--soft:#8a8a8a;--card:#f5f5f3}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Outfit",system-ui,sans-serif;font-weight:300;overflow-x:clip;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+
+/* ---------- 1. Hero ---------- */
+.hero{position:relative;height:220vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.mark{position:absolute;top:22px;left:50%;width:26px;transform:translateX(-50%);opacity:.92}
+.word span{display:inline-block}
+.word{position:absolute;left:0;right:0;margin:0;text-align:center;font-weight:500;line-height:.8;letter-spacing:-.02em;white-space:nowrap;color:var(--ink);user-select:none}
+.tee{position:absolute;left:50%;width:min(64vw,760px);transform:translate(-50%,0);will-change:transform;filter:drop-shadow(0 30px 40px rgba(0,0,0,var(--sh,.10)))}
+@media(max-width:600px){.tee{width:86vw}.mark{top:18px;width:22px}}
+
+/* ---------- 2. Slogan ---------- */
+.claim{min-height:100vh;display:grid;place-content:center;justify-items:center;gap:44px;padding:12vh max(5vw,16px);text-align:center}
+.claim h2{margin:0;font-weight:300;font-size:clamp(40px,8.4vw,132px);line-height:1;letter-spacing:-.025em;text-wrap:balance;filter:blur(var(--b,18px));opacity:var(--o,.15);transition:filter .12s linear,opacity .12s linear}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 30px;border:1px solid var(--ink);border-radius:999px;color:var(--ink);text-decoration:none;font-size:16px;font-weight:400;opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease,background .25s,color .25s}
+.btn.on{opacity:1;transform:none}
+.btn:hover,.btn:focus-visible{background:var(--ink);color:#fff;outline:none}
+.btn:focus-visible{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--ink)}
+
+/* ---------- 3. Collection ---------- */
+.collection{padding:clamp(48px,8vw,120px) max(5vw,16px) clamp(64px,10vw,140px);max-width:1400px;margin:0 auto}
+.collection h3{margin:0 0 clamp(28px,4vw,48px);font-weight:300;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.01em}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,2vw,28px)}
+.item{margin:0}
+.ph{aspect-ratio:4/5;background:var(--card);display:grid;place-items:center;padding:12%;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:contain;transition:transform .6s ease}
+.item:hover .ph img{transform:scale(1.04)}
+.item figcaption{display:flex;justify-content:space-between;gap:12px;padding-top:12px;font-size:15px}
+.item .price{white-space:nowrap;color:var(--soft)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:28px max(5vw,16px);border-top:1px solid #eee;font-size:14px;color:var(--soft)}
+footer img{width:20px}
+footer a{color:var(--ink);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .claim h2{filter:none!important;opacity:1!important}
+  .btn{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<section class="hero" id="top">
+  <div class="stage" id="stage">
+    <img class="mark" src="img/logo.svg" alt="Soril">
+    <h1 class="word" id="word"><span id="wordIn">SORIL</span></h1>
+    <img class="tee" id="tee" src="img/tee.webp" alt="T-shirt Soril brun, imprimé cœur au dos">
+  </div>
+</section>
+
+<section class="claim" id="claim">
+  <h2 id="slogan">On apporte la couleur</h2>
+  <a class="btn" id="cta" href="#collection">Voir la collection</a>
+</section>
+
+<section class="collection" id="collection">
+  <h3>Collection</h3>
+  <div class="grid" id="grid"></div>
+</section>
+
+<footer>
+  <img src="img/logo.svg" alt="">
+  <a href="https://www.instagram.com/soril.co/">@soril.co</a>
+  <span>© Soril</span>
+</footer>
+
+<script>
+{
+  const items = [
+    { name: "T-shirt Soril — Brun", price: "25,90 €", img: "img/tee.webp" },
+    { name: "Zip hoodie — Menthe", price: "", img: "img/zip_menthe.webp" },
+    { name: "Zip hoodie — Crème", price: "", img: "img/zip_creme.webp" },
+    { name: "Zip hoodie — Violet", price: "", img: "img/zip_violet.webp" }
+  ];
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  document.getElementById("grid").innerHTML = items.map(i =>
+    `<figure class="item"><div class="ph"><img src="${esc(i.img)}" alt="${esc(i.name)}" loading="lazy"></div>` +
+    `<figcaption><span>${esc(i.name)}</span>${i.price ? `<span class="price">${esc(i.price)}</span>` : ""}</figcaption></figure>`
+  ).join("");
+
+  const stage = document.getElementById("stage");
+  const word = document.getElementById("word");
+  const tee = document.getElementById("tee");
+  const hero = document.querySelector(".hero");
+  const slogan = document.getElementById("slogan");
+  const cta = document.getElementById("cta");
+  const claim = document.getElementById("claim");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let start = 0, end = 0, wordH = 0;
+
+  const layout = () => {
+    const W = stage.clientWidth, H = stage.clientHeight;
+    // fit SORIL to ~94% of the width
+    word.style.fontSize = "100px";
+    const w100 = document.getElementById("wordIn").getBoundingClientRect().width;
+    let fs = (W * 0.94) / w100 * 100;
+    fs = Math.min(fs, H * 0.62);
+    word.style.fontSize = fs + "px";
+    wordH = fs * 0.72;
+    // letters sit in the lower half; the tee peeks below and bites their base
+    const wordTop = Math.round(H * (W < 600 ? 0.66 : 0.58) - wordH / 2);
+    word.style.top = wordTop + "px";
+    const teeH = tee.getBoundingClientRect().height || tee.clientWidth * 0.84;
+    start = wordTop + wordH * 0.9;              // top edge of the tee at load
+    start = Math.min(start, H - H * 0.1);       // always peeks at least a little
+    end = wordTop + wordH / 2 - teeH / 2;       // centred over the word
+    end = Math.max(H * 0.06, Math.min(end, H - teeH - H * 0.04));
+    tee.style.top = start + "px";
+    update();
+  };
+
+  const update = () => {
+    const H = stage.clientHeight;
+    const span = hero.offsetHeight - H;
+    const p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / span));
+    const e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    const y = (end - start) * e;
+    tee.style.transform = `translate(-50%, ${y}px) scale(${1 + 0.06 * e})`;
+    tee.style.setProperty("--sh", (0.1 + 0.12 * e).toFixed(3));
+
+    if (!reduce) {
+      const r = claim.getBoundingClientRect();
+      const q = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75)));
+      slogan.style.setProperty("--b", (18 * (1 - q)).toFixed(2) + "px");
+      slogan.style.setProperty("--o", (0.15 + 0.85 * q).toFixed(3));
+      cta.classList.toggle("on", q > 0.95);
+    }
+  };
+
+  document.addEventListener("scroll", update, { passive: true, capture: true });
+  addEventListener("scroll", update, { passive: true });
+  const ro = new ResizeObserver(layout);
+  ro.observe(stage);
+  if (tee.complete) layout(); else tee.addEventListener("load", layout);
+  if (document.fonts) document.fonts.ready.then(layout);
+}
+</script>
+</body>
+</html>
